@@ -1,4 +1,4 @@
-cd /Users/raynovarina/Sites/AtomProjects/Rails5/GettingStarted/blog
+cd /Users/raynovarina/Sites/AtomProjects/Rails5/BobBot/verify-service
 
 per: https://guides.rubyonrails.org/getting_started.html
      https://www.railstutorial.org/book/beginning
@@ -148,6 +148,7 @@ Installing pg 1.1.3 with native extensions
 
 /config/database.yml
 In addition to using the pg gem, ensure that your config/database.yml file is using the postgresql adapter. The development section of your config/database.yml file should look something like this:
+
 $ cat config/database.yml
 # PostgreSQL. Versions 9.1 and up are supported.
 #
@@ -171,16 +172,18 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password:
 
 development:
   <<: *default
-  database: myapp_development
+  database: db/development_postgresql
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  #username: myapp
+  #username: verify-service
 
   # The password associated with the postgres role (username).
   #password:
@@ -208,7 +211,11 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: myapp_test
+  database: test_postgresql
+
+staging:
+  <<: *default
+  database: db/production_postgresql
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -231,9 +238,11 @@ test:
 #
 production:
   <<: *default
-  database: myapp_production
-  username: myapp
-  password: <%= ENV['MYAPP_DATABASE_PASSWORD'] %>
+  #database: db/production_postgresql
+  #username: verify-service
+  #password: <%= ENV['VERIFY-SERVICE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+
 
 Now re-install your dependencies (to generate a new Gemfile.lock):
 $ bundle install
